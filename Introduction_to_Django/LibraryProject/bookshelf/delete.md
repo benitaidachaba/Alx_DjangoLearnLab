@@ -1,5 +1,5 @@
-]: retrieved_book.delete()
-Out[8]: (1, {'bookshelf.Book': 1})
+from bookshelf.models import Book
 
-In [9]: print(Book.objects.all())
-<QuerySet []>
+book=Book.objects.get(author="George Orwell")
+book.delete()
+(1, {'bookshelf.Book': 1})
