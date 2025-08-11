@@ -5,8 +5,8 @@ new_librarian = Librarian(name="monica", library="ancient days")
 
 
 # Query all books by a specific author.
-def getbooks(author_books):
-    author = Author.objects.get(name=author_books)
+def getbooks(author_name):
+    author = Author.objects.get(name=author_name)
     return Book.objects.filter(author=author)
 
 
