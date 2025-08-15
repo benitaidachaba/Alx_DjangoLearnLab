@@ -67,64 +67,70 @@ def logout_view(request):
     return render(request, "relationship_app/logout.html")
 
 
-
 # Helper functions for role checks
 def home_view(request):
-    return render(request, 'relationship_app/home.html')
+    return render(request, "relationship_app/home.html")
+
 
 def is_admin(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    return hasattr(user, "userprofile") and user.userprofile.role == "Admin"
+
 
 def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return hasattr(user, "userprofile") and user.userprofile.role == "Librarian"
+
 
 def is_member(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return hasattr(user, "userprofile") and user.userprofile.role == "Member"
+
 
 @user_passes_test(is_admin)
 @login_required
 def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
+    return render(request, "relationship_app/admin_view.html")
+
 
 @user_passes_test(is_librarian)
 @login_required
 def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html')
+    return render(request, "relationship_app/librarian_view.html")
+
 
 @user_passes_test(is_member)
 @login_required
 def member_view(request):
-    return render(request, 'relationship_app/member_view.html')
+    return render(request, "relationship_app/member_view.html")
 
-@permission_required('relationship_app.can_add_book', raise_exception=True)
+
+@permission_required("relationship_app.can_add_book", raise_exception=True)
 def add_book_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect("home")
     else:
         form = BookForm()
-    return render(request, 'relationship_app/add_book.html', {'form': form})
+    return render(request, "relationship_app/add_book.html", {"form": form})
 
 
-@permission_required('relationship_app.can_change_book', raise_exception=True)
+@permission_required("relationship_app.can_change_book", raise_exception=True)
 def edit_book_view(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect("home")
     else:
         form = BookForm(instance=book)
-    return render(request, 'relationship_app/edit_book.html', {'form': form})
+    return render(request, "relationship_app/edit_book.html", {"form": form})
 
 
-@permission_required('relationship_app.can_delete_book', raise_exception=True)
+@permission_required("relationship_app.can_delete_book", raise_exception=True)
 def delete_book_view(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         book.delete()
-        return redirect('home')
-    return render(request, 'relationship_app/delete_book.html', {'book': book})
+        return redirect("home")
+    return render(request, "relationship_app/delete_book.html", {"book": book})
